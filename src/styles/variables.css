@@ -1,0 +1,102 @@
+:root {
+  /* ===== 色(現場端末+紙の管理台帳トーン。強調色は深緑1色のみ) ===== */
+  --color-bg: #F4F4F1;
+  --color-surface: #FFFFFF;
+  --color-text: #1F2421;
+  --color-text-sub: #687069;
+  --color-border: #D7DCD7;
+  --color-accent: #2F5D50;
+  --color-accent-dark: #244A40;
+  --color-accent-soft: #E3EAE6;
+  --color-warning: #B66A2C;
+  --color-warning-soft: #F4E7DA;
+  --color-danger: #A63D40;
+  --color-danger-soft: #F3E1E1;
+  --color-disabled-bg: #E7E8E5;
+  --color-disabled-text: #9A9F98;
+
+  /* ===== 角丸(控えめ。大きな丸みは使わない) ===== */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  /* ===== 余白 ===== */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* ===== 文字サイズ ===== */
+  --font-size-heading: 20px;
+  --font-size-subheading: 16px;
+  --font-size-body: 15px;
+  --font-size-caption: 13px;
+  --font-size-button: 16px;
+
+  /* ===== 等幅(管理番号用) ===== */
+  --font-mono: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+
+  --header-height: 56px;
+  --control-height: 56px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: hidden;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Segoe UI', sans-serif;
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, p {
+  margin: 0;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+img, svg, canvas, video {
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  max-width: 100%;
+  font-family: inherit;
+  font-size: 16px;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
