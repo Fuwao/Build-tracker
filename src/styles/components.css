@@ -969,36 +969,153 @@
   margin-top: var(--space-3);
 }
 
+/* 画面表示用のラベル枠(プレビュー)。印刷サイズの目安として画面上では px ベースで表示する。 */
 .qr-label {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-2);
+  justify-content: center;
+  gap: 6px;
   background: var(--color-surface);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: var(--space-5) var(--space-4);
+  padding: var(--space-4);
   text-align: center;
+  margin: 0 auto;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
 }
 
+/* 画面プレビュー: サイズプリセットごとの目安幅(px換算、実寸はmm指定が印刷時に優先) */
+.qr-label--small  { width: 100%; max-width: 220px; }
+.qr-label--medium { width: 100%; max-width: 300px; }
+.qr-label--large  { width: 100%; max-width: 420px; }
+
 .qr-label__name {
-  font-size: var(--font-size-heading);
   font-weight: 700;
   color: var(--color-text);
   line-height: 1.3;
 }
+.qr-label--small  .qr-label__name { font-size: 14px; }
+.qr-label--medium .qr-label__name { font-size: 18px; }
+.qr-label--large  .qr-label__name { font-size: 22px; }
 
 .qr-label__number {
-  font-size: var(--font-size-body);
   color: var(--color-text-sub);
   font-family: monospace;
 }
+.qr-label--small  .qr-label__number { font-size: 12px; }
+.qr-label--medium .qr-label__number { font-size: 14px; }
+.qr-label--large  .qr-label__number { font-size: 16px; }
+
+.qr-label__sub {
+  color: var(--color-text-sub);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.qr-label__url {
+  color: var(--color-text-sub);
+  font-size: 9px;
+  word-break: break-all;
+  line-height: 1.3;
+}
 
 .qr-label__image {
-  max-width: 100%;
   height: auto;
-  margin: var(--space-2) auto;
+  margin: 2px auto;
   display: block;
+}
+.qr-label--small  .qr-label__image { width: 100px; }
+.qr-label--medium .qr-label__image { width: 150px; }
+.qr-label--large  .qr-label__image { width: 220px; }
+
+/* サイズ選択UI(画面のみ) */
+.qr-size-picker {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.qr-size-picker__btn {
+  flex: 1;
+  min-width: 96px;
+  padding: 10px 8px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+.qr-size-picker__btn--active {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+.qr-size-picker__btn small {
+  display: block;
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--color-text-sub);
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   印刷用スタイル: mm 指定で実寸を反映する
+   ========================================================================== */
+@media print {
+  .no-print { display: none !important; }
+  .app-shell { display: block; background: #fff; }
+  .header, .bottom-actions { display: none !important; }
+  .qr-issue-box { margin: 0; }
+
+  .qr-label {
+    border: 1px solid #999;
+    border-radius: 2mm;
+    box-sizing: border-box;
+    page-break-inside: avoid;
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  /* mm指定: 小=工具向け / 中=ケース向け / 大=掲示向け */
+  .qr-label--small {
+    width: 45mm;
+    padding: 2mm;
+    gap: 1mm;
+  }
+  .qr-label--medium {
+    width: 65mm;
+    padding: 3mm;
+    gap: 1.5mm;
+  }
+  .qr-label--large {
+    width: 95mm;
+    padding: 4mm;
+    gap: 2mm;
+  }
+
+  .qr-label__name,
+  .qr-label__number,
+  .qr-label__sub,
+  .qr-label__url {
+    color: #000 !important;
+  }
+
+  .qr-label--small  .qr-label__name { font-size: 9pt; }
+  .qr-label--medium .qr-label__name { font-size: 12pt; }
+  .qr-label--large  .qr-label__name { font-size: 15pt; }
+
+  .qr-label--small  .qr-label__number { font-size: 7pt; }
+  .qr-label--medium .qr-label__number { font-size: 9pt; }
+  .qr-label--large  .qr-label__number { font-size: 11pt; }
+
+  /* QRコードがつぶれないよう、印刷時は mm 指定で実寸を確保 */
+  .qr-label--small  .qr-label__image { width: 28mm; height: 28mm; }
+  .qr-label--medium .qr-label__image { width: 40mm; height: 40mm; }
+  .qr-label--large  .qr-label__image { width: 65mm; height: 65mm; }
 }
 
 /* ==========================================================================
