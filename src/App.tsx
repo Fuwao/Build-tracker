@@ -3,6 +3,7 @@
 // 一切存在しない。admin/employeeの権限制御を導入する際は、ログイン状態を
 // 確認するラッパーコンポーネントと、ロールごとに許可されたルートのみを
 // 表示するガード処理をこのファイルに追加する必要がある。
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LoadingScreen } from './components/LoadingScreen';
@@ -50,14 +51,39 @@ function LoginRedirect() {
 }
 
 // ---------------------------------------------------------------------------
+// 認証確認中のローディング画面。
+// 5秒以上同じ画面が表示され続けた場合、「接続に時間がかかっています」と
+// 補足メッセージ + 再読み込みボタンを表示する。
+// 'checking' → 'loading_profile' のように authStatus が変化しても
+// この LoadingScreen 自体は再マウントされないため、タイマーは
+// 認証確認プロセス全体を通して1本だけ動く。
+// ---------------------------------------------------------------------------
+function AuthLoadingScreen({ message }: { message: string }) {
+  const [slow, setSlow] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setSlow(true), 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <LoadingScreen
+      message={message}
+      subMessage={slow ? '接続に時間がかかっています。\n通信環境を確認するか、ページを再読み込みしてください。' : undefined}
+      showReload={slow}
+    />
+  );
+}
+
+// ---------------------------------------------------------------------------
 // 認証状態に応じてルートを切り替えるコンポーネント
 // ---------------------------------------------------------------------------
 function AppRoutes() {
   const { authStatus } = useAuth();
 
-  // ① 認証確認中 / profile取得中 → ローディング表示
+  // ① 認証確認中 / profile取得中 → ローディング表示(5秒超で再読み込み案内)
   if (authStatus === 'checking' || authStatus === 'loading_profile') {
-    return <LoadingScreen message="ログイン状態を確認しています…" />;
+    return <AuthLoadingScreen message="ログイン状況の確認中…" />;
   }
 
   // ② profileエラー系 → エラー画面(ログアウトボタン付き)
